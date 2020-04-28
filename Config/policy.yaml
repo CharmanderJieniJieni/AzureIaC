@@ -1,0 +1,31 @@
+ManagementGroups:
+
+Subscriptions:
+  SwuPersonal:
+    SubscriptionId: 87674ca3-ef0c-4e74-af96-61b5429f7b7b
+    Policies:
+      -
+        DefinitionName: EnforceStorageAccountHttps
+        Assignment: Null
+      -
+        DefinitionName: AppendResourceGroupOwnerTag
+        Assignment: Null
+      -
+        DefinitionName: DeployWindowsDiagnosticLogExtension
+        Assignment: Null
+    
+
+PolicyDefinitions:
+  EnforceStorageAccountHttps:
+    DisplayName: Enforce Https on Storage Account Traffic
+    Description: This policy validates if a Blob storage to be created is enforcing https traffic. If not it will deny the creation
+    RulePath: Templates/Policy/DenyStorageAccountHttpsTraffic.rule.json
+  AppendResourceGroupOwnerTag:
+    DisplayName: Append Resource Group owner tag to resources
+    Description: This policy append owner tag of resource group to all resources created inside
+    RulePath: Templates/Policy/AppendResourceGroupOwnerTag.rule.json
+  DeployWindowsDiagnosticLogExtension:
+    DisplayName: Deploy Diagnostic Log Extension for Windows VM
+    Description: This policy deploy Windows Diagnostic Log extension for VM
+    RulePath: Templates/Policy/VMExtensionDeployIfNotExists.windows.json
+    ParamsPath: Templates/Policy/VMExtensionDeployIfNotExists.params.json

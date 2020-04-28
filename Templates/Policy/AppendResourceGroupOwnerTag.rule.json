@@ -1,0 +1,23 @@
+{
+    "if": {
+        "allOf": [
+            {
+                "field": "tags['owner']",
+                "exists": "false"
+            },
+            {
+                "value": "[resourceGroup().tags['owner']]",
+                "notEquals": ""
+            }
+        ]
+    },
+    "then": {
+        "effect": "append",
+        "details": [
+            {
+                "field": "tags['owner']",
+                "value": "[resourceGroup().tags['owner']]"
+            }
+        ]
+    }
+}

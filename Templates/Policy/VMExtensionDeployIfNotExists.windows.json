@@ -1,0 +1,223 @@
+{
+    "if": {
+        "allOf": [
+            {
+                "field": "type",
+                "equals": "Microsoft.Compute/virtualMachines"
+            },
+            {
+                "field": "Microsoft.Compute/imagePublisher",
+                "equals": "MicrosoftWindowsServer"
+            },
+            {
+                "field": "Microsoft.Compute/imageOffer",
+                "equals": "WindowsServer"
+            },
+            {
+                "field": "Microsoft.Compute/imageSKU",
+                "in": [
+                    "2008-R2-SP1",
+                    "2008-R2-SP1-smalldisk",
+                    "2012-Datacenter",
+                    "2012-Datacenter-smalldisk",
+                    "2012-R2-Datacenter",
+                    "2012-R2-Datacenter-smalldisk",
+                    "2016-Datacenter",
+                    "2016-Datacenter-Server-Core",
+                    "2016-Datacenter-Server-Core-smalldisk",
+                    "2016-Datacenter-smalldisk",
+                    "2016-Datacenter-with-Containers",
+                    "2016-Datacenter-with-RDSH"
+                ]
+            }
+        ]
+    },
+    "then": {
+        "effect": "deployIfNotExists",
+        "details": {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "existenceCondition": {
+                "allOf": [
+                    {
+                        "field": "Microsoft.Compute/virtualMachines/extensions/type",
+                        "equals": "IaaSDiagnostics"
+                    },
+                    {
+                        "field": "Microsoft.Compute/virtualMachines/extensions/publisher",
+                        "equals": "Microsoft.Azure.Diagnostics"
+                    }
+                ]
+            },
+            "roleDefinitionIds": [
+                "/providers/microsoft.authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+            ],
+            "deployment": {
+                "properties": {
+                    "mode": "incremental",
+                    "parameters": {
+                        "vmName": {
+                            "value": "[field('name')]"
+                        },
+                        "storageAccountResourceId": {
+                            "value": "[parameters('storageAccountResourceId')]"
+                        }
+                    },
+                    "template": {
+                        "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                        "contentVersion": "1.0.0.0",
+                        "parameters": {
+                            "vmName": {
+                                "type": "string"
+                            },
+                            "storageAccountResourceId": {
+                                "type": "string"
+                            }
+                        },
+                        "variables": {
+                            "storageAccountDisAssemble": "[split(parameters('storageAccountResourceId'), '/')]",
+                            "storageAccountName": "[last(variables('storageAccountDisAssemble'))]"
+                        },
+                        "resources": [
+                            {
+                                "name": "[concat(parameters('vmName'), '/Microsoft.Insights.VMDiagnosticsSettings')]",
+                                "type": "Microsoft.Compute/virtualMachines/extensions",
+                                "location": "[resourceGroup().location]",
+                                "apiVersion": "2019-07-01",
+                                "properties": {
+                                    "publisher": "Microsoft.Azure.Diagnostics",
+                                    "type": "IaaSDiagnostics",
+                                    "typeHandlerVersion": "1.5",
+                                    "autoUpgradeMinorVersion": true,
+                                    "settings": {
+                                        "WadCfg": {
+                                            "DiagnosticMonitorConfiguration": {
+                                                "overallQuotaInMB": 10000,
+                                                "DiagnosticInfrastructureLogs": {
+                                                    "scheduledTransferLogLevelFilter": "Error"
+                                                },
+                                                "PerformanceCounters": {
+                                                    "scheduledTransferPeriod": "PT1M",
+                                                    "sinks": "AzureMonitorSink",
+                                                    "PerformanceCounterConfiguration": [
+                                                        {
+                                                            "counterSpecifier": "\\Processor(_Total)\\% Processor Time",
+                                                            "sampleRate": "PT1M",
+                                                            "unit": "percent"
+                                                        }
+                                                    ]
+                                                },
+                                                "Directories": {
+                                                    "scheduledTransferPeriod": "PT5M",
+                                                    "IISLogs": {
+                                                        "containerName": "iislogs"
+                                                    },
+                                                    "FailedRequestLogs": {
+                                                        "containerName": "iisfailed"
+                                                    },
+                                                    "DataSources": [
+                                                        {
+                                                            "containerName": "mynewprocess",
+                                                            "Absolute": {
+                                                                "path": "C:\\MyNewProcess",
+                                                                "expandEnvironment": false
+                                                            }
+                                                        },
+                                                        {
+                                                            "containerName": "badapp",
+                                                            "Absolute": {
+                                                                "path": "%SYSTEMDRIVE%\\BadApp",
+                                                                "expandEnvironment": true
+                                                            }
+                                                        },
+                                                        {
+                                                            "containerName": "goodapp",
+                                                            "LocalResource": {
+                                                                "relativePath": "..\\PeanutButter",
+                                                                "name": "Skippy"
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                "EtwProviders": {
+                                                    "sinks": "",
+                                                    "EtwEventSourceProviderConfiguration": [
+                                                        {
+                                                            "scheduledTransferPeriod": "PT5M",
+                                                            "provider": "MyProviderClass",
+                                                            "Event": [
+                                                                {
+                                                                    "id": 0
+                                                                },
+                                                                {
+                                                                    "id": 1,
+                                                                    "eventDestination": "errorTable"
+                                                                }
+                                                            ],
+                                                            "DefaultEvents": {}
+                                                        }
+                                                    ],
+                                                    "EtwManifestProviderConfiguration": [
+                                                        {
+                                                            "scheduledTransferPeriod": "PT2M",
+                                                            "scheduledTransferLogLevelFilter": "Information",
+                                                            "provider": "5974b00b-84c2-44bc-9e58-3a2451b4e3ad",
+                                                            "Event": [
+                                                                {
+                                                                    "id": 0
+                                                                }
+                                                            ],
+                                                            "DefaultEvents": {}
+                                                        }
+                                                    ]
+                                                },
+                                                "WindowsEventLog": {
+                                                    "scheduledTransferPeriod": "PT5M",
+                                                    "DataSource": [
+                                                        {
+                                                            "name": "System!*[System[Provider[@Name='Microsoft Antimalware']]]"
+                                                        },
+                                                        {
+                                                            "name": "System!*[System[Provider[@Name='NTFS'] and (EventID=55)]]"
+                                                        },
+                                                        {
+                                                            "name": "System!*[System[Provider[@Name='disk'] and (EventID=7 or EventID=52 or EventID=55)]]"
+                                                        }
+                                                    ]
+                                                },
+                                                "Logs": {
+                                                    "scheduledTransferPeriod": "PT1M",
+                                                    "scheduledTransferLogLevelFilter": "Verbose",
+                                                    "sinks": "ApplicationInsights.AppLogs"
+                                                },
+                                                "CrashDumps": {
+                                                    "directoryQuotaPercentage": 30,
+                                                    "dumpType": "Mini",
+                                                    "containerName": "wad-crashdumps",
+                                                    "CrashDumpConfiguration": [
+                                                        {
+                                                            "processName": "mynewprocess.exe"
+                                                        },
+                                                        {
+                                                            "processName": "badapp.exe"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "StorageAccount": "[variables('storageAccountName')]",
+                                        "StorageType": "TableAndBlob"
+                                    },
+                                    "protectedSettings": {
+                                        "storageAccountName": "[variables('storageAccountName')]",
+                                        "storageAccountKey": "[listkeys(parameters('storageAccountResourceId'), '2015-05-01-preview').key1]",
+                                        "storageAccountEndPoint": "https://core.windows.net"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

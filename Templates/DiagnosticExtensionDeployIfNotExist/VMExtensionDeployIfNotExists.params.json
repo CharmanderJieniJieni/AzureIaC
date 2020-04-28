@@ -1,0 +1,8 @@
+{
+    "storageAccountResourceId": {
+        "type": "String",
+        "metadata": {
+            "description": "Storage Account resource ID"
+        }
+    }
+}
