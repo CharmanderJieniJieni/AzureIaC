@@ -1,0 +1,46 @@
+# Python package
+# Create and test a Python package on multiple Python versions.
+# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/python
+
+trigger:
+- master
+
+parameters:
+- name: tenantId
+  type: string
+- name: clientId
+  type: string
+- name: clientSecret
+  type: string
+
+pool:
+  vmImage: 'ubuntu-latest'
+strategy:
+  matrix:
+    Python27:
+      python.version: '2.7'
+    Python35:
+      python.version: '3.5'
+    Python36:
+      python.version: '3.6'
+    Python37:
+      python.version: '3.7'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '$(python.version)'
+  displayName: 'Use Python $(python.version)'
+
+- script: |
+    export AZURE_USERNAME=parameters.clientId
+    export AZURE_PASSWORD=parameters.clientSecret
+    export TENANT=parameters.tenantId
+
+    python3 -m pip install --upgrade pip
+    pip install azure
+    pip install pyyaml
+    python3 runner.py --option policy_definition --policy-config-path Config/policy.yaml
+  displayName: 'Install dependencies and run script'
+
