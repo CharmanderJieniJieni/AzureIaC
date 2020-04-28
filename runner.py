@@ -1,7 +1,7 @@
-from Pipeline.Manager.PolicyManager import PolicyManager
-from Pipeline.Loader.PolicyLoader import PolicyLoader
-from Pipeline.Model.PolicyConfig import PolicyConfig
-from Pipeline.Util.Session import Session
+from Manager.PolicyManager import PolicyManager
+from Loader.PolicyLoader import PolicyLoader
+from Model.PolicyConfig import PolicyConfig
+from Util.Session import Session
 import argparse
 
 

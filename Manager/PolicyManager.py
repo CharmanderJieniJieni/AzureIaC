@@ -1,8 +1,8 @@
 from azure.mgmt.resource.policy import PolicyClient
 from azure.mgmt.resource.policy.models import PolicyDefinition
 
-from Pipeline.Model.PolicyConfig import PolicyConfig
-from Pipeline.Util import Session
+from Model.PolicyConfig import PolicyConfig
+from Util import Session
 
 import json, subprocess
 

@@ -1,4 +1,4 @@
-from Pipeline.Model.PolicyConfig import PolicyConfig
+from Model.PolicyConfig import PolicyConfig
 import yaml, json
 
 
