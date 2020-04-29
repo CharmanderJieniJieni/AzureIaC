@@ -28,9 +28,9 @@ steps:
   displayName: 'Use Python $(python.version)'
 
 - script: |
-    export AZURE_USERNAME=parameters.clientId
-    export AZURE_PASSWORD=parameters.clientSecret
-    export TENANT=parameters.tenantId
+    export AZURE_USERNAME=$AZURE_USERNAME
+    export AZURE_PASSWORD=$AZURE_PASSWORD
+    export TENANT=$TENANT
 
     python3 -m pip install --upgrade pip
     pip install azure-mgmt
