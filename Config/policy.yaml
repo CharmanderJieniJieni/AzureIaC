@@ -4,15 +4,12 @@ Subscriptions:
   SwuPersonal:
     SubscriptionId: 87674ca3-ef0c-4e74-af96-61b5429f7b7b
     Policies:
-      -
-        DefinitionName: EnforceStorageAccountHttps
-        Assignment: Null
-      -
-        DefinitionName: AppendResourceGroupOwnerTag
-        Assignment: Null
-      -
-        DefinitionName: DeployWindowsDiagnosticLogExtension
-        Assignment: Null
+      # -
+      #   DefinitionName: EnforceStorageAccountHttps
+      #   Assignment: Null
+      # -
+      #   DefinitionName: AppendResourceGroupOwnerTag
+      #   Assignment: Null
     
 
 PolicyDefinitions:
@@ -24,8 +21,3 @@ PolicyDefinitions:
     DisplayName: Append Resource Group owner tag to resources
     Description: This policy append owner tag of resource group to all resources created inside
     RulePath: Templates/Policy/AppendResourceGroupOwnerTag.rule.json
-  DeployWindowsDiagnosticLogExtension:
-    DisplayName: Deploy Diagnostic Log Extension for Windows VM
-    Description: This policy deploy Windows Diagnostic Log extension for VM
-    RulePath: Templates/Policy/VMExtensionDeployIfNotExists.windows.json
-    ParamsPath: Templates/Policy/VMExtensionDeployIfNotExists.params.json
