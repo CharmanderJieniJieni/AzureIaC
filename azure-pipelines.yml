@@ -28,6 +28,10 @@ steps:
     pip install azure-mgmt-resource
     pip install azure-common
     pip install pyyaml
+    echo 'printing variables'
+    echo $AZURE_USERNAME
+    echo $AZURE_PASSWORD
+    echo $TENANT
     python3 runner.py --option policy_definition --policy-config-path Config/policy.yaml
   displayName: 'Install dependencies and run script'
 
