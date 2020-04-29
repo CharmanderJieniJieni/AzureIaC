@@ -4,12 +4,12 @@ Subscriptions:
   SwuPersonal:
     SubscriptionId: 87674ca3-ef0c-4e74-af96-61b5429f7b7b
     Policies:
-      # -
-      #   DefinitionName: EnforceStorageAccountHttps
-      #   Assignment: Null
-      # -
-      #   DefinitionName: AppendResourceGroupOwnerTag
-      #   Assignment: Null
+      -
+        DefinitionName: EnforceStorageAccountHttps
+        Assignment: Null
+      -
+        DefinitionName: AppendResourceGroupOwnerTag
+        Assignment: Null
     
 
 PolicyDefinitions:
