@@ -6,14 +6,6 @@
 trigger:
 - master
 
-parameters:
-- name: tenantId
-  type: string
-- name: clientId
-  type: string
-- name: clientSecret
-  type: string
-
 pool:
   vmImage: 'ubuntu-latest'
 strategy:
