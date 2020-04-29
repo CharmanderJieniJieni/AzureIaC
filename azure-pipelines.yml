@@ -25,7 +25,7 @@ steps:
     export TENANT=$TENANT
 
     python3 -m pip install --upgrade pip
-    pip install azure-mgmt
+    pip install azure-mgmt-resource
     pip install azure-common
     pip install pyyaml
     python3 runner.py --option policy_definition --policy-config-path Config/policy.yaml
